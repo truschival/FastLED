@@ -104,7 +104,6 @@ set(namespace "${PROJECT_NAME}::")
 ADD_LIBRARY(${LIBRARY_NAME}  ${SRCS} )
 
 SET_TARGET_PROPERTIES(${LIBRARY_NAME} PROPERTIES
-#    COMPILE_FLAGS "--std=gnu++11"
 	VERSION ${LIBRARY_VERSION}
 	SOVERSION ${LIBRARY_VERSION}
   )
@@ -144,7 +143,7 @@ INSTALL(TARGETS ${LIBRARY_NAME}
   COMPONENT DEVELOP
   ARCHIVE DESTINATION ${INSTALL_LIB_DIR}
   LIBRARY DESTINATION ${INSTALL_LIB_DIR}
-  # this will only add -I<prefix>/include/FastLED to client compile flags
+  # this will only add -I<prefix>/include/fastled to client compile flags
   INCLUDES DESTINATION ${INSTALL_INCLUDE_DIR}/${LIBRARY_NAME}
   )
 
@@ -199,19 +198,6 @@ INSTALL(DIRECTORY
    DESTINATION ${INSTALL_INCLUDE_DIR}/${LIBRARY_NAME}
    )
 
-INSTALL(
-  EXPORT ${targets_export_name}
-  COMPONENT DEVELOP
-  NAMESPACE "${COMPONENT_NAME}::"
-  DESTINATION "${INSTALL_CMAKE_DIR}/${COMPONENT_NAME}"
-  )
-
-INSTALL(
-  FILES "${project_config}" "${version_config}"
-  COMPONENT DEVELOP
-  DESTINATION "${INSTALL_CMAKE_DIR}/${COMPONENT_NAME}"
-  )
-
 # --------------------------------------------------------------------
 # Cmake Configuration file infrastructure
 # --------------------------------------------------------------------
@@ -229,22 +215,20 @@ write_basic_package_version_file(
 configure_file("cmake/Config.cmake.in" "${project_config}" @ONLY)
 
 
-# Config
+# Version config file
 INSTALL(
     FILES "${project_config}" "${version_config}"
     COMPONENT DEVELOP
-    DESTINATION "${INSTALL_CMAKE_DIR}"
+    DESTINATION "${INSTALL_CMAKE_DIR}/${COMPONENT_NAME}"
 )
 
 # Config
-# * <prefix>/lib/cmake/Blink/BlinkTargets.cmake
 install(
     EXPORT "${targets_export_name}"
     COMPONENT DEVELOP
     NAMESPACE "${namespace}"
-    DESTINATION "${INSTALL_CMAKE_DIR}"
+    DESTINATION "${INSTALL_CMAKE_DIR}/${COMPONENT_NAME}"
 )
-
 
 # --------------------------------------------------------------------
 # Generate CPACK installer
